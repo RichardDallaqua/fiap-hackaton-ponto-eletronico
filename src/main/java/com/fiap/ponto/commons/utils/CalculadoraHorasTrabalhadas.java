@@ -5,41 +5,49 @@ import com.fiap.ponto.dataprovider.documents.PontoDocument;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CalculadoraHorasTrabalhadas {
 
-    private static final Map<TipoRegistro, TipoRegistro> PAR_TIPO_REGISTRO = new HashMap<>();
-
-    static {
-        PAR_TIPO_REGISTRO.put(TipoRegistro.ENTRADA, TipoRegistro.SAIDA);
-        PAR_TIPO_REGISTRO.put(TipoRegistro.SAIDA_ALMOCO, TipoRegistro.VOLTA_ALMOCO);
-        // Adicione outros pares de tipos de registro conforme necessário
-    }
-
     public static Duration calcularHorasTrabalhadas(List<PontoDocument> registros) {
-        Duration totalHorasTrabalhadas = Duration.ZERO;
-        Map<TipoRegistro, PontoDocument> registrosPendentes = new HashMap<>();
+        LocalDateTime entrada = null;
+        LocalDateTime saidaAlmoco = null;
+        LocalDateTime voltaAlmoco = null;
+        LocalDateTime saida = null;
+
+        Duration horasTrabalhadas = Duration.ZERO;
 
         for (PontoDocument ponto : registros) {
-            TipoRegistro tipoRegistro = ponto.getTipoRegistro();
-            if (PAR_TIPO_REGISTRO.containsKey(tipoRegistro)) {
-                TipoRegistro tipoCorrespondente = PAR_TIPO_REGISTRO.get(tipoRegistro);
-                PontoDocument pontoCorrespondente = registrosPendentes.get(tipoCorrespondente);
-                if (pontoCorrespondente != null) {
-                    Duration diferenca = Duration.between(pontoCorrespondente.getDataHora(), ponto.getDataHora());
-                    totalHorasTrabalhadas = totalHorasTrabalhadas.plus(diferenca);
-                    registrosPendentes.remove(tipoCorrespondente);
-                } else {
-                    registrosPendentes.put(tipoRegistro, ponto);
-                }
-            } else {
-                registrosPendentes.put(tipoRegistro, ponto);
+            switch (ponto.getTipoRegistro()) {
+                case ENTRADA:
+                    entrada = ponto.getDataHora();
+                    break;
+                case SAIDA_ALMOCO:
+                    saidaAlmoco = ponto.getDataHora();
+                    break;
+                case VOLTA_ALMOCO:
+                    voltaAlmoco = ponto.getDataHora();
+                    break;
+                case SAIDA:
+                    saida = ponto.getDataHora();
+                    break;
+                default:
+                    // Não faz nada para outros tipos de registro
+                    break;
             }
         }
 
-        return totalHorasTrabalhadas;
+        if (entrada != null && saidaAlmoco != null && voltaAlmoco != null && saida != null) {
+            Duration horasManha = Duration.between(entrada, saidaAlmoco);
+            Duration horasTarde = Duration.between(voltaAlmoco, saida);
+            horasTrabalhadas = horasManha.plus(horasTarde);
+        }
+
+        return horasTrabalhadas;
     }
+
+
 }

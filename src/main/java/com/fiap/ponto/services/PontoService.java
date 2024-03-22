@@ -1,6 +1,5 @@
 package com.fiap.ponto.services;
 
-import com.fiap.ponto.commons.utils.CalculadoraHorasTrabalhadas;
 import com.fiap.ponto.domain.PontoDomain;
 import com.fiap.ponto.services.dto.EspelhoPontoDTO;
 import com.fiap.ponto.services.dto.PontoDTO;

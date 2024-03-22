@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-22T14:37:08-0300",
+    date = "2024-03-22T17:40:46-0300",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.8 (Oracle Corporation)"
 )
 @Component
@@ -26,6 +26,7 @@ public class PontoDTOMapperImpl implements PontoDTOMapper {
 
         pontoDTO.nomeFuncionario( document.getNomeFuncionario() );
         pontoDTO.cpf( document.getCpf() );
+        pontoDTO.email( document.getEmail() );
         pontoDTO.dataHora( document.getDataHora() );
         pontoDTO.tipoRegistro( document.getTipoRegistro() );
 
