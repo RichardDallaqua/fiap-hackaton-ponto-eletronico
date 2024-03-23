@@ -4,6 +4,7 @@ import com.fiap.ponto.dataprovider.documents.PontoDocument;
 import com.fiap.ponto.services.dto.PontoDetails;
 import com.fiap.ponto.services.dto.PontoInfoDTO;
 import com.fiap.ponto.services.gateways.RelatorioGateway;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -13,6 +14,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class RelatorioDataProvider implements RelatorioGateway {
 
@@ -21,6 +23,7 @@ public class RelatorioDataProvider implements RelatorioGateway {
 
     @Override
     public void gerarRelatorioEnviaEmail(List<PontoDocument> listaPonto, Duration horasTrabalhadas, String email) {
+        log.info("<<< Gerando dados de relatorio para envio por email >>>");
         List<PontoDetails> detailsList = new ArrayList<>();
 
         for (PontoDocument document : listaPonto){
@@ -33,5 +36,6 @@ public class RelatorioDataProvider implements RelatorioGateway {
 
         WebClient webClient = WebClient.create();
         webClient.post().uri(url.concat("/api/v1/relatorio/sendEmail")).body(BodyInserters.fromValue(pontoInfo));
+        log.info("<<< Email enviado >>>");
     }
 }
