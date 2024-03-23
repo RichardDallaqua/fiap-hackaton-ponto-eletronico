@@ -35,7 +35,7 @@ public class RelatorioDataProvider implements RelatorioGateway {
         var pontoInfo = PontoInfoDTO.builder().pontos(detailsList).totalHoras(horasTrabalhadas.toHours()).totalMinutos(horasTrabalhadas.toMinutes()).build();
 
         WebClient webClient = WebClient.create();
-        webClient.post().uri(url.concat("/api/v1/relatorio/sendEmail")).body(BodyInserters.fromValue(pontoInfo));
+        webClient.post().uri(url.concat("/api/v1/relatorio/sendEmail")).body(BodyInserters.fromValue(pontoInfo)).retrieve().bodyToMono(Void.class).subscribe();
         log.info("<<< Email enviado >>>");
     }
 }
