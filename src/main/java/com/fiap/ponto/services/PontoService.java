@@ -1,6 +1,7 @@
 package com.fiap.ponto.services;
 
 import com.fiap.ponto.commons.type.TipoRegistro;
+import com.fiap.ponto.dataprovider.RelatorioDataProvider;
 import com.fiap.ponto.domain.PontoDomain;
 import com.fiap.ponto.services.dto.EspelhoPontoDTO;
 import com.fiap.ponto.services.dto.PontoDTO;
@@ -24,6 +25,9 @@ public class PontoService {
     @Autowired
     private PontoDTOMapper mapper;
 
+    @Autowired
+    private RelatorioDataProvider relatorioDataProvider;
+
     public PontoDTO registrarPonto(String cpf, String nomeFuncionario, String email, TipoRegistro tipoRegistro) {
         log.info("<<< Registrando ponto de funcionario >>>");
         PontoDomain pontoDomain = new PontoDomain(nomeFuncionario, cpf, email, tipoRegistro);
@@ -42,5 +46,11 @@ public class PontoService {
         var duration = calcularHorasTrabalhadas(listaPonto);
         return PontoDTOMapper.espelhoPontoDTO(mapper.toDtoList(listaPonto),
                 duration.toHours(), duration.toMinutes());
+    }
+
+    public void gerarRelatorioEnvioEmail(String cpf, Long mes, String email){
+        var listaPonto = pontoGateway.filterEspelhoDePonto(cpf, mes);
+        var duration = calcularHorasTrabalhadas(listaPonto);
+        relatorioDataProvider.gerarRelatorioEnviaEmail(listaPonto, duration, email);
     }
 }

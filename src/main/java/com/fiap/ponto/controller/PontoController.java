@@ -45,7 +45,7 @@ public class PontoController {
     @PostMapping("/relatorio/sendEmail")
     public ResponseEntity<EspelhoPontoDTO> enviarRelatorioEmail(@RequestHeader("Authorization") String token, @RequestParam("mes") Long mes){
         JwtDto jwtDto = JwtDecode.getDataFromJWT(token);
-        pontoService.obterEspelhoDePonto(jwtDto.getCpf(), mes);
+        pontoService.gerarRelatorioEnvioEmail(jwtDto.getCpf(), mes, jwtDto.getEmail());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
