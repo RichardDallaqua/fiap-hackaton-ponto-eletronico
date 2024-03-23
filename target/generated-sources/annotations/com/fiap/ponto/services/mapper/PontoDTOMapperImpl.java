@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-23T11:57:01-0300",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.10 (Azul Systems, Inc.)"
+    date = "2024-03-23T16:56:36-0300",
+    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.7 (Microsoft)"
 )
 @Component
 public class PontoDTOMapperImpl implements PontoDTOMapper {

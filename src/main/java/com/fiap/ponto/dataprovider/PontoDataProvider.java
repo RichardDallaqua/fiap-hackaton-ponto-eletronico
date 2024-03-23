@@ -1,11 +1,14 @@
 package com.fiap.ponto.dataprovider;
 
+import com.fiap.ponto.commons.type.TipoRegistro;
 import com.fiap.ponto.dataprovider.documents.PontoDocument;
 import com.fiap.ponto.dataprovider.mapper.PontoDocumentMapper;
 import com.fiap.ponto.dataprovider.repository.IPontoRepository;
 import com.fiap.ponto.domain.PontoDomain;
 import com.fiap.ponto.services.gateways.PontoGateway;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.MongoExpression;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -29,6 +32,12 @@ public class PontoDataProvider implements PontoGateway {
 
     @Override
     public PontoDocument save(PontoDomain pontoDomain) {
+        PontoDocument document = mongoOperations.findOne(criarFiltroOrderBy(pontoDomain.getCpf().getNumero()), PontoDocument.class);
+        if(document == null){
+            pontoDomain.setTipoRegistro(TipoRegistro.ENTRADA);
+        }else{
+            pontoDomain.setTipoRegistro(TipoRegistro.getNextValue(document.getTipoRegistro()));
+        }
         return repository.save(mapper.toDocument(pontoDomain));
     }
 
@@ -45,6 +54,15 @@ public class PontoDataProvider implements PontoGateway {
         LocalDateTime dataFim = LocalDate.now().plusDays(1).atStartOfDay();
         Query query = new Query(Criteria.where("cpf").is(cpf)
                 .and("dataHora").gte(dataInicio).lt(dataFim));
+        return query;
+    }
+
+    private Query criarFiltroOrderBy(String cpf){
+        LocalDateTime dataInicio = LocalDate.now().atStartOfDay();
+        LocalDateTime dataFim = LocalDate.now().plusDays(1).atStartOfDay();
+        Query query = new Query(Criteria.where("cpf").is(cpf)
+                .and("dataHora").gte(dataInicio).lt(dataFim));
+        query.with(Sort.by(Sort.Direction.DESC, "dataHora"));
         return query;
     }
 

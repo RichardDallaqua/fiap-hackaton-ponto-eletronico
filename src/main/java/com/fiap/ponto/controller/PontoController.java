@@ -1,6 +1,7 @@
 package com.fiap.ponto.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fiap.ponto.commons.type.TipoRegistro;
 import com.fiap.ponto.commons.utils.JwtDecode;
 import com.fiap.ponto.controller.dto.JwtDto;
 import com.fiap.ponto.services.PontoService;
@@ -25,7 +26,7 @@ public class PontoController {
     @PostMapping
     public ResponseEntity<PontoDTO> registrarPonto(@RequestHeader("Authorization") String token) {
         JwtDto jwtDto = JwtDecode.getDataFromJWT(token);
-        return ResponseEntity.status(HttpStatus.CREATED).body(pontoService.registrarPonto(jwtDto.getCpf(), jwtDto.getNome(), jwtDto.getEmail()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(pontoService.registrarPonto(jwtDto.getCpf(), jwtDto.getNome(), jwtDto.getEmail(), null));
     }
 
     @GetMapping

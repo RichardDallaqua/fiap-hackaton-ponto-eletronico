@@ -13,12 +13,12 @@ public class PontoDomain {
     private LocalDateTime dataHoraNow;
     private TipoRegistro tipoRegistro;
 
-    public PontoDomain(String nomeFuncionario, String cpf, String email) {
+    public PontoDomain(String nomeFuncionario, String cpf, String email, TipoRegistro tipoRegistro) {
         this.nomeFuncionario = nomeFuncionario;
         this.cpf = new CPFDomain(cpf);
         this.email = email;
         this.dataHoraNow = setDataHoraNow();
-        this.tipoRegistro = setTipoRegistro();
+        this.tipoRegistro = tipoRegistro;
     }
 
     public String getEmail() {
@@ -37,34 +37,6 @@ public class PontoDomain {
         return LocalDateTime.now();
     }
 
-    private TipoRegistro setTipoRegistro(){
-
-        if(this.dataHoraNow.toLocalTime().isBefore(LocalTime.of(12, 00))){
-            tipoRegistro = TipoRegistro.ENTRADA;
-        }
-
-        if(this.dataHoraNow.toLocalTime().isBefore(LocalTime.of(13, 0))
-                && this.dataHoraNow.toLocalTime().isAfter(LocalTime.of(11, 59))){
-            tipoRegistro = TipoRegistro.SAIDA_ALMOCO;
-        }
-
-        if(this.dataHoraNow.toLocalTime().isBefore(LocalTime.of(14, 0))
-                && this.dataHoraNow.toLocalTime().isAfter(LocalTime.of(11, 59))){
-            tipoRegistro = TipoRegistro.VOLTA_ALMOCO;
-        }
-
-        if(this.dataHoraNow.toLocalTime().isAfter(LocalTime.of(14, 0))){
-            tipoRegistro = TipoRegistro.SAIDA;
-        }
-
-        if(this.dataHoraNow.toLocalTime().isBefore(LocalTime.of(8, 0))
-                || this.dataHoraNow.toLocalTime().isAfter(LocalTime.of(17, 00))){
-            tipoRegistro = TipoRegistro.HORA_EXTRA;
-        }
-
-        return this.tipoRegistro;
-    }
-
     public String getNomeFuncionario() {
         return nomeFuncionario;
     }
@@ -73,4 +45,7 @@ public class PontoDomain {
         return cpf;
     }
 
+    public void setTipoRegistro(TipoRegistro tipoRegistro) {
+        this.tipoRegistro = tipoRegistro;
+    }
 }

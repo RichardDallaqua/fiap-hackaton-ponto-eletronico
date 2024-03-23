@@ -1,5 +1,6 @@
 package com.fiap.ponto.services;
 
+import com.fiap.ponto.commons.type.TipoRegistro;
 import com.fiap.ponto.domain.PontoDomain;
 import com.fiap.ponto.services.dto.EspelhoPontoDTO;
 import com.fiap.ponto.services.dto.PontoDTO;
@@ -23,9 +24,9 @@ public class PontoService {
     @Autowired
     private PontoDTOMapper mapper;
 
-    public PontoDTO registrarPonto(String cpf, String nomeFuncionario, String email) {
+    public PontoDTO registrarPonto(String cpf, String nomeFuncionario, String email, TipoRegistro tipoRegistro) {
         log.info("<<< Registrando ponto de funcionario >>>");
-        PontoDomain pontoDomain = new PontoDomain(nomeFuncionario, cpf, email);
+        PontoDomain pontoDomain = new PontoDomain(nomeFuncionario, cpf, email, tipoRegistro);
         var ponto = pontoGateway.save(pontoDomain);
         log.info("<<< Ponto registrado com sucesso >>>");
         return mapper.toDto(ponto);
