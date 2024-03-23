@@ -4,10 +4,10 @@ application:
 spring:
   data:
     mongodb:
-      uri: ${MONGO_URL:mongodb://root:root@127.0.0.1:27017/db?authSource=admin}
+      uri: ${MONGO_URL:mongodb://guest:guest@127.0.0.1:27017/db?authSource=admin}
 
 server:
-  port: 8081
+  port: 8080
   servlet:
     context-path: /ponto-ms
 

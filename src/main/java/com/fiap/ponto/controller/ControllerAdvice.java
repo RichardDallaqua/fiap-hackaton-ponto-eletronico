@@ -22,5 +22,4 @@ public class ControllerAdvice {
         bindException.getAllErrors().forEach(error -> sb.append(error.getDefaultMessage()).append("; "));
         return ErrorResponseDTO.builder().message(sb.toString()).build();
     }
-
 }
