@@ -40,4 +40,11 @@ public class PontoController {
         JwtDto jwtDto = JwtDecode.getDataFromJWT(token);
         return ResponseEntity.status(HttpStatus.OK).body(pontoService.obterEspelhoDePonto(jwtDto.getCpf(), mes));
     }
+
+    @PostMapping("/relatorio/sendEmail")
+    public ResponseEntity<EspelhoPontoDTO> enviarRelatorioEmail(@RequestHeader("Authorization") String token, @RequestParam("mes") Long mes){
+        JwtDto jwtDto = JwtDecode.getDataFromJWT(token);
+        pontoService.obterEspelhoDePonto(jwtDto.getCpf(), mes);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

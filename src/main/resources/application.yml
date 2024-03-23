@@ -11,3 +11,5 @@ server:
   servlet:
     context-path: /ponto-ms
 
+gateways:
+  url: ${REPORT_URL:http://localhost:9090/report-ms}

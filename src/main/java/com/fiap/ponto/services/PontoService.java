@@ -1,7 +1,6 @@
 package com.fiap.ponto.services;
 
 import com.fiap.ponto.domain.PontoDomain;
-import com.fiap.ponto.services.dto.EspelhoPontoDTO;
 import com.fiap.ponto.services.dto.PontoDTO;
 import com.fiap.ponto.services.gateways.PontoGateway;
 import com.fiap.ponto.services.mapper.PontoDTOMapper;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.fiap.ponto.commons.utils.CalculadoraHorasTrabalhadas.*;
+import static com.fiap.ponto.commons.utils.CalculadoraHorasTrabalhadas.calcularHorasTrabalhadas;
 
 
 @Service
@@ -23,6 +22,8 @@ public class PontoService {
     private PontoDTOMapper mapper;
 
 
+
+
     public PontoDTO registrarPonto(String cpf, String nomeFuncionario, String email) {
         PontoDomain pontoDomain = new PontoDomain(nomeFuncionario, cpf, email);
         var ponto = pontoGateway.save(pontoDomain);
@@ -33,10 +34,8 @@ public class PontoService {
         return mapper.toDtoList(pontoGateway.filterPonto(cpf));
     }
 
-    public EspelhoPontoDTO obterEspelhoDePonto(String cpf, Long mes){
+    public void gerarRelatorioEnviaEmail(String cpf, Long mes) {
         var listaPonto = pontoGateway.filterEspelhoDePonto(cpf, mes);
         var duration = calcularHorasTrabalhadas(listaPonto);
-        return PontoDTOMapper.espelhoPontoDTO(mapper.toDtoList(listaPonto),
-                duration.toHours(), duration.toMinutes());
     }
 }
